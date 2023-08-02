@@ -14,11 +14,11 @@ struct PersistenceController {
 	
 	static var preview: PersistenceController = {
 		let controller = PersistenceController(inMemory: true)
-		for _ in 0..<10 {
-			let task = Task(context: controller.container.viewContext)
-			task.title = "task "
-			
+		for item in 0..<10 {
+			let task = ToDoTask(context: controller.container.viewContext)
+			task.title = "task - \(item)"
 		}
+		controller.save()
 		return controller
 	}()
 	
@@ -43,6 +43,7 @@ struct PersistenceController {
 			do {
 				try context.save()
 			} catch {
+				context.rollback()
 				print(String(describing: error.localizedDescription))
 			}
 		}

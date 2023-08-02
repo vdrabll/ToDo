@@ -1,5 +1,5 @@
 //
-//  Task+CoreDataProperties.swift
+//  ToDoTask+CoreDataProperties.swift
 //  ToDoList
 //
 //  Created by Виктория Федосова on 02.08.2023.
@@ -8,6 +8,7 @@
 
 import Foundation
 import CoreData
+
 
 @objc(ToDoTask)
 public class ToDoTask: NSManagedObject {
@@ -20,9 +21,9 @@ extension ToDoTask {
         return NSFetchRequest<ToDoTask>(entityName: "ToDoTask")
     }
 
-    @NSManaged public var id: UUID?
-    @NSManaged public var isCheked: Bool
-    @NSManaged public var title: String?
+    @NSManaged public var id: UUID
+    @NSManaged public var isChecked: Bool
+    @NSManaged public var title: String
 
 }
 
