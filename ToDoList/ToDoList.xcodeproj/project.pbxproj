@@ -13,6 +13,7 @@
 		51458F482A7A75960024558A /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 51458F472A7A75960024558A /* Preview Assets.xcassets */; };
 		51458F532A7A7DF60024558A /* ToDoListModel.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 51458F512A7A7DF60024558A /* ToDoListModel.xcdatamodeld */; };
 		51458F552A7A80AD0024558A /* PersistenceController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51458F542A7A80AD0024558A /* PersistenceController.swift */; };
+		51458F592A7AA26D0024558A /* Task+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51458F572A7AA26D0024558A /* Task+CoreDataProperties.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -23,6 +24,7 @@
 		51458F472A7A75960024558A /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		51458F522A7A7DF60024558A /* ToDoListModel.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = ToDoListModel.xcdatamodel; sourceTree = "<group>"; };
 		51458F542A7A80AD0024558A /* PersistenceController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersistenceController.swift; sourceTree = "<group>"; };
+		51458F572A7AA26D0024558A /* Task+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Task+CoreDataProperties.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -39,6 +41,7 @@
 		51458F342A7A75900024558A = {
 			isa = PBXGroup;
 			children = (
+				51458F572A7AA26D0024558A /* Task+CoreDataProperties.swift */,
 				51458F3F2A7A75900024558A /* ToDoList */,
 				51458F3E2A7A75900024558A /* Products */,
 			);
@@ -183,6 +186,7 @@
 				51458F432A7A75900024558A /* ContentView.swift in Sources */,
 				51458F412A7A75900024558A /* ToDoListApp.swift in Sources */,
 				51458F532A7A7DF60024558A /* ToDoListModel.xcdatamodeld in Sources */,
+				51458F592A7AA26D0024558A /* Task+CoreDataProperties.swift in Sources */,
 				51458F552A7A80AD0024558A /* PersistenceController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
