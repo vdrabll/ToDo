@@ -17,13 +17,14 @@ struct PersistenceController {
 		for item in 0..<10 {
 			let task = ToDoTask(context: controller.container.viewContext)
 			task.title = "task - \(item)"
+			task.id = UUID()
+			task.isChecked = false
 		}
 		controller.save()
 		return controller
 	}()
 	
 	init(inMemory: Bool = false) {
-		
 		container = NSPersistentContainer(name: "ToDoListModel")
 		
 		if inMemory {
