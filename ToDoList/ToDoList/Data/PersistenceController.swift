@@ -14,9 +14,18 @@ struct PersistenceController {
 	
 	static var preview: PersistenceController = {
 		let controller = PersistenceController(inMemory: true)
-		for item in 0..<10 {
-			let task = ToDoTask(context: controller.container.viewContext)
-			task.title = "task - \(item)"
+		let viewContext = controller.container.viewContext
+		
+		for item in 0..<5 {
+			let task = ToDoTask(context: viewContext)
+			task.title = "task true - \(item)"
+			task.id = UUID()
+			task.isChecked = true
+		}
+		
+		for item in 0..<5 {
+			let task = ToDoTask(context: viewContext)
+			task.title = "task false - \(item)"
 			task.id = UUID()
 			task.isChecked = false
 		}
@@ -28,11 +37,13 @@ struct PersistenceController {
 		container = NSPersistentContainer(name: "ToDoListModel")
 		
 		if inMemory {
-			container.persistentStoreDescriptions.first?.url = URL(fileURLWithPath: "/dev/null")
+			container.persistentStoreDescriptions.first!.url = URL(fileURLWithPath: "/dev/null")
 		}
-		container.loadPersistentStores { description, error in
+		
+		container.loadPersistentStores { (storeDescription, error) in
 			if let error = error {
-				fatalError("Error: \(error.localizedDescription)")
+				print(String(describing: storeDescription))
+				print(String(describing: error))
 			}
 		}
 	}
