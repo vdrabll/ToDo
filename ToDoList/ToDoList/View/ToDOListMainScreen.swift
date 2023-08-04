@@ -9,6 +9,8 @@ import SwiftUI
 import CoreData
 
 struct ToDOListMainScreen: View {
+	@Environment(\.managedObjectContext) var managedObjectContext
+	
 	@FetchRequest(sortDescriptors: [NSSortDescriptor(keyPath: \ToDoTask.title, ascending: true)],
 		animation: .default)
 	private var tasks: FetchedResults<ToDoTask>
@@ -23,7 +25,11 @@ struct ToDOListMainScreen: View {
 							.font(.subheadline)
 					}
 					Button("add") {
-						print("hello")
+						let task = ToDoTask(context: managedObjectContext)
+						task.isChecked = Bool.random()
+						task.title = "im task in core data coredata "
+						task.id = UUID()
+						PersistenceController.shared.save()
 					}
 					.frame(alignment: .bottom)
 				}
@@ -34,6 +40,9 @@ struct ToDOListMainScreen: View {
 								Text(task.title)
 							}
 						}
+						.onDelete { index in
+							self.deleteItem(at: index)
+						}
 					}
 					Section("complited") {
 						ForEach(tasks) { task in
@@ -42,9 +51,22 @@ struct ToDOListMainScreen: View {
 									.foregroundColor(.gray)
 							}
 						}
+						.onDelete { index in
+							self.deleteItem(at: index)
+						}
 					}
 				}
 			}
+		}
+	}
+}
+
+extension ToDOListMainScreen {
+	func deleteItem(at offsets: IndexSet) {
+		for index in offsets {
+			let task = tasks[index]
+			managedObjectContext.delete(task)
+			PersistenceController.shared.save()
 		}
 	}
 }

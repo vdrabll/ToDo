@@ -33,6 +33,14 @@ struct PersistenceController {
 		return controller
 	}()
 	
+	func addDefoutlTasks() {
+		let task = ToDoTask(context: container.viewContext)
+		task.isChecked = true
+		task.title = "im coredata checked task"
+		task.id = UUID()
+		PersistenceController.shared.save()
+	}
+	
 	init(inMemory: Bool = false) {
 		container = NSPersistentContainer(name: "ToDoListModel")
 		
