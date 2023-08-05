@@ -29,7 +29,11 @@ struct PersistenceController {
 			task.id = UUID()
 			task.isChecked = false
 		}
-		controller.save()
+		do {
+			try viewContext.save()
+		} catch {
+			print(String(describing: error.localizedDescription))
+		}
 		return controller
 	}()
 	
