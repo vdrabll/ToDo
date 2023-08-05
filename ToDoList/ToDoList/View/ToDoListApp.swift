@@ -13,7 +13,7 @@ struct ToDoListApp: App {
 	
     var body: some Scene {
         WindowGroup {
-			ToDOListMainScreen()
+			ToDoListMainScreen()
 				.environment(\.managedObjectContext, persistenceController.container.viewContext)
         }
     }

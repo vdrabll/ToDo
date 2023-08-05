@@ -1,5 +1,5 @@
 //
-//  ContentView.swift
+//  ToDoListMainScreen.swift
 //  ToDoList
 //
 //  Created by Виктория Федосова on 02.08.2023.
@@ -8,11 +8,13 @@
 import SwiftUI
 import CoreData
 
-struct ToDOListMainScreen: View {
+struct ToDoListMainScreen: View {
 	@Environment(\.managedObjectContext) var managedObjectContext
 	
-	@FetchRequest(sortDescriptors: [NSSortDescriptor(keyPath: \ToDoTask.title, ascending: true)],
+	@FetchRequest(
+		sortDescriptors: [NSSortDescriptor(keyPath: \ToDoTask.title, ascending: true)],
 		animation: .default)
+	
 	private var tasks: FetchedResults<ToDoTask>
 	var body: some View {
 		VStack {
@@ -21,20 +23,16 @@ struct ToDOListMainScreen: View {
 					VStack {
 						Text(Date(), style: .date)
 							.font(.title)
-						Text(" \(tasks.count) complited, \(tasks.count) incomplited")
+						Text(" \(tasks.count) completed, \(tasks.count) incompleted")
 							.font(.subheadline)
 					}
 					Button("add") {
-						let task = ToDoTask(context: managedObjectContext)
-						task.isChecked = Bool.random()
-						task.title = "im task in core data coredata "
-						task.id = UUID()
-						PersistenceController.shared.save()
+						// navigation on new view there
 					}
 					.frame(alignment: .bottom)
 				}
 				List {
-					Section("incomplited") {
+					Section("not completed") {
 						ForEach(tasks) { task in
 							if task.isChecked == false {
 								Text(task.title)
@@ -44,7 +42,7 @@ struct ToDOListMainScreen: View {
 							self.deleteItem(at: index)
 						}
 					}
-					Section("complited") {
+					Section("completed ") {
 						ForEach(tasks) { task in
 							if task.isChecked == true {
 								Text(task.title)
@@ -61,18 +59,22 @@ struct ToDOListMainScreen: View {
 	}
 }
 
-extension ToDOListMainScreen {
+extension ToDoListMainScreen {
 	func deleteItem(at offsets: IndexSet) {
 		for index in offsets {
 			let task = tasks[index]
 			managedObjectContext.delete(task)
-			PersistenceController.shared.save()
+			do {
+				try managedObjectContext.save()
+			} catch {
+				print(String(error.localizedDescription))
+			}
 		}
 	}
 }
 
 struct ContentView_Previews: PreviewProvider {
 	static var previews: some View {
-		ToDOListMainScreen().environment(\.managedObjectContext, PersistenceController.preview.container.viewContext)
+		ToDoListMainScreen().environment(\.managedObjectContext, PersistenceController.preview.container.viewContext)
 	}
 }
