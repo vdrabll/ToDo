@@ -17,8 +17,8 @@ struct ToDoListMainScreen: View {
 	
 	private var tasks: FetchedResults<ToDoTask>
 	var body: some View {
-		NavigationStack() {
-			VStack() {
+		NavigationStack {
+			VStack {
 				VStack(alignment: .leading) {
 				 HStack(spacing: 140) {
 					 VStack {
@@ -37,8 +37,20 @@ struct ToDoListMainScreen: View {
 					 Section("not completed") {
 						 ForEach(tasks) { task in
 							 if task.isChecked == false {
-								 NavigationLink(task.title) {
-									 TaskEditView(task: task)
+								 HStack {
+									 Image(systemName: "circle")
+										 .onTapGesture {
+											 task.isChecked = true
+											 do {
+												 try managedObjectContext.save()
+											 } catch {
+												 print(String(error.localizedDescription))
+											 }
+										 }
+									 
+									 NavigationLink(task.title) {
+										 TaskEditView(task: task)
+									 }
 								 }
 							 }
 						 }
@@ -46,11 +58,23 @@ struct ToDoListMainScreen: View {
 							 self.deleteItem(at: index)
 						 }
 					 }
-					 Section("completed ") {
+					 Section("completed") {
 						 ForEach(tasks) { task in
 							 if task.isChecked == true {
-								 NavigationLink(task.title) {
-									 TaskEditView(task: task)
+								 HStack {
+									 Image(systemName: "checkmark.circle.fill")
+										 .onTapGesture {
+											 task.isChecked = false
+											 do {
+												 try managedObjectContext.save()
+											 } catch {
+												 print(String(error.localizedDescription))
+											 }
+										 }
+									 
+									 NavigationLink(task.title) {
+										 TaskEditView(task: task)
+									 }
 								 }
 							 }
 						 }
@@ -66,8 +90,6 @@ struct ToDoListMainScreen: View {
 }
 
 extension ToDoListMainScreen {
-	
-	
 	func deleteItem(at offsets: IndexSet) {
 		for index in offsets {
 			let task = tasks[index]
@@ -78,6 +100,10 @@ extension ToDoListMainScreen {
 				print(String(error.localizedDescription))
 			}
 		}
+	}
+	
+	func changeStatus() -> Image {
+		Image("curcle")
 	}
 }
 
