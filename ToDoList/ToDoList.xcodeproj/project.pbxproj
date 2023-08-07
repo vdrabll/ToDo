@@ -26,7 +26,7 @@
 		51458F472A7A75960024558A /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		51458F522A7A7DF60024558A /* ToDoListModel.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = ToDoListModel.xcdatamodel; sourceTree = "<group>"; };
 		51458F542A7A80AD0024558A /* PersistenceController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersistenceController.swift; sourceTree = "<group>"; };
-		51458F5F2A7AAD240024558A /* ToDoTask+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "ToDoTask+CoreDataProperties.swift"; path = "ToDoList/Data/ToDoTask+CoreDataProperties.swift"; sourceTree = "<group>"; };
+		51458F5F2A7AAD240024558A /* ToDoTask+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ToDoTask+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		51BFB20F2A7E8EB9005577AB /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -44,7 +44,6 @@
 		51458F342A7A75900024558A = {
 			isa = PBXGroup;
 			children = (
-				51458F5F2A7AAD240024558A /* ToDoTask+CoreDataProperties.swift */,
 				51BFB20F2A7E8EB9005577AB /* Info.plist */,
 				51458F3F2A7A75900024558A /* ToDoList */,
 				51458F3E2A7A75900024558A /* Products */,
@@ -92,6 +91,7 @@
 			isa = PBXGroup;
 			children = (
 				51458F512A7A7DF60024558A /* ToDoListModel.xcdatamodeld */,
+				51458F5F2A7AAD240024558A /* ToDoTask+CoreDataProperties.swift */,
 				51458F542A7A80AD0024558A /* PersistenceController.swift */,
 			);
 			path = Data;

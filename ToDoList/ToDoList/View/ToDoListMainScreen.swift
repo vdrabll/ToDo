@@ -24,7 +24,7 @@ struct ToDoListMainScreen: View {
 					 VStack {
 						 Text(Date(), style: .date)
 							 .font(.title)
-						 Text(" \(tasks.count) completed, \(tasks.count) incompleted")
+						 Text(" \( tasks.filter({$0.isChecked != false}).count) completed, \(tasks.filter({$0.isChecked == false}).count) incompleted")
 							 .font(.subheadline)
 					 }
 					 
@@ -47,7 +47,6 @@ struct ToDoListMainScreen: View {
 												 print(String(error.localizedDescription))
 											 }
 										 }
-									 
 									 NavigationLink(task.title) {
 										 TaskEditView(task: task)
 									 }
@@ -71,7 +70,6 @@ struct ToDoListMainScreen: View {
 												 print(String(error.localizedDescription))
 											 }
 										 }
-									 
 									 NavigationLink(task.title) {
 										 TaskEditView(task: task)
 									 }
