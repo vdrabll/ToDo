@@ -26,7 +26,6 @@ struct TaskEditView: View {
 	var body: some View {
 		VStack(alignment: .center) {
 			Text("Task")
-			
 				.font(.system(size: 40))
 				.bold()
 			Spacer(minLength: 90)
@@ -69,13 +68,12 @@ struct TaskEditView: View {
 			print(String(error.localizedDescription))
 		}
 	}
-	}
+}
 
 
 struct TaskEditView_Previews: PreviewProvider {
 	static var previews: some View {
 		TaskEditView(task: nil)
 			.padding()
-			.background(/*@START_MENU_TOKEN@*//*@PLACEHOLDER=View@*/Color("textfield.background")/*@END_MENU_TOKEN@*/)
 	}
 }

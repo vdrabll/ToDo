@@ -9,6 +9,14 @@ import SwiftUI
 import CoreData
 
 struct ToDoListMainScreen: View {
+	private enum Constants {
+		static let sectionNotComplitedName = "not completed"
+		static let sectionComplitedName = "completed"
+		static let add = "+"
+		static let circle = "circle"
+		static let circleFill = "checkmark.circle.fill"
+	}
+	
 	@Environment(\.managedObjectContext) var managedObjectContext
 	
 	@FetchRequest(
@@ -16,78 +24,76 @@ struct ToDoListMainScreen: View {
 		animation: .default)
 	
 	private var tasks: FetchedResults<ToDoTask>
+	
 	var body: some View {
 		NavigationStack {
-			VStack {
-				VStack(alignment: .leading) {
-				 HStack(spacing: 140) {
-					 VStack {
-						 Text(Date(), style: .date)
-							 .font(.title)
-						 Text(" \( tasks.filter({$0.isChecked != false}).count) completed, \(tasks.filter({$0.isChecked == false}).count) incompleted")
-							 .font(.subheadline)
-					 }
-					 
-					 .frame(alignment: .bottom)
-					 NavigationLink("+") {
-						 TaskEditView(task: nil)
-					 }
-				 }
-				 List {
-					 Section("not completed") {
-						 ForEach(tasks) { task in
-							 if task.isChecked == false {
-								 HStack {
-									 Image(systemName: "circle")
-										 .onTapGesture {
-											 task.isChecked = true
-											 do {
-												 try managedObjectContext.save()
-											 } catch {
-												 print(String(error.localizedDescription))
-											 }
-										 }
-									 NavigationLink(task.title) {
-										 TaskEditView(task: task)
-									 }
-								 }
-							 }
-						 }
-						 .onDelete { index in
-							 self.deleteItem(at: index)
-						 }
-					 }
-					 Section("completed") {
-						 ForEach(tasks) { task in
-							 if task.isChecked == true {
-								 HStack {
-									 Image(systemName: "checkmark.circle.fill")
-										 .onTapGesture {
-											 task.isChecked = false
-											 do {
-												 try managedObjectContext.save()
-											 } catch {
-												 print(String(error.localizedDescription))
-											 }
-										 }
-									 NavigationLink(task.title) {
-										 TaskEditView(task: task)
-									 }
-								 }
-							 }
-						 }
-						 .onDelete { index in
-							 self.deleteItem(at: index)
-						 }
-					 }
-				 }
-			 }
-		 }
+			VStack(alignment: .leading) {
+				HStack(spacing: 140) {
+					VStack {
+						Text(Date(), style: .date)
+							.font(.title)
+						Text(" \( tasks.filter({$0.isChecked != false}).count) completed, \(tasks.filter({$0.isChecked == false}).count) incompleted")
+							.font(.subheadline) }
+					.frame(alignment: .bottom)
+					NavigationLink(Constants.add) {
+						TaskEditView(task: nil)
+					}
+				}
+				List {
+					Section(Constants.sectionNotComplitedName) {
+						ForEach(tasks) { task in
+							if task.isChecked == false {
+								HStack {
+									Image(systemName: Constants.circle)
+										.onTapGesture {
+											task.isChecked = true
+											self.saveContext()
+										}
+									NavigationLink(task.title) {
+										TaskEditView(task: task)
+									}
+								}
+							}
+						}
+						.onDelete { index in
+							self.deleteItem(at: index)
+						}
+					}
+					Section(Constants.sectionComplitedName) {
+						ForEach(tasks) { task in
+							if task.isChecked == true {
+								HStack {
+									Image(systemName: Constants.circleFill)
+										.onTapGesture {
+											task.isChecked = false
+											self.saveContext()
+										}
+									NavigationLink(task.title) {
+										TaskEditView(task: task)
+									}
+								}
+							}
+						}
+						.onDelete { index in
+							self.deleteItem(at: index)
+						}
+					}
+				}
+			}
+			
 		}
 	}
 }
 
 extension ToDoListMainScreen {
+	func saveContext() {
+		do {
+			try managedObjectContext.save()
+		} catch {
+			print(String(error.localizedDescription))
+		}
+	}
+	
 	func deleteItem(at offsets: IndexSet) {
 		for index in offsets {
 			let task = tasks[index]
@@ -98,10 +104,6 @@ extension ToDoListMainScreen {
 				print(String(error.localizedDescription))
 			}
 		}
-	}
-	
-	func changeStatus() -> Image {
-		Image("curcle")
 	}
 }
 
