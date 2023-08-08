@@ -9,44 +9,68 @@ import SwiftUI
 import CoreData
 
 struct ToDoListMainScreen: View {
-	@Environment(\.managedObjectContext) var managedObjectContext
+	private enum Constants {
+		static let sectionNotComplitedName = "not completed"
+		static let sectionComplitedName = "completed"
+		static let add = "+"
+		static let circle = "circle"
+		static let circleFill = "checkmark.circle.fill"
+	}
 	
+	@Environment(\.managedObjectContext) var managedObjectContext
 	@FetchRequest(
 		sortDescriptors: [NSSortDescriptor(keyPath: \ToDoTask.title, ascending: true)],
 		animation: .default)
 	
 	private var tasks: FetchedResults<ToDoTask>
+	
 	var body: some View {
-		VStack {
+		NavigationStack {
 			VStack(alignment: .leading) {
 				HStack(spacing: 140) {
 					VStack {
 						Text(Date(), style: .date)
 							.font(.title)
-						Text(" \(tasks.count) completed, \(tasks.count) incompleted")
-							.font(.subheadline)
-					}
-					Button("add") {
-						// navigation on new view there
-					}
+						Text(" \( tasks.filter({$0.isChecked != false}).count) completed, \(tasks.filter({$0.isChecked == false}).count) incompleted")
+						.font(.subheadline) }
 					.frame(alignment: .bottom)
+					NavigationLink(Constants.add) {
+						TaskEditView(task: nil)
+					}
 				}
 				List {
-					Section("not completed") {
+					Section(Constants.sectionNotComplitedName) {
 						ForEach(tasks) { task in
 							if task.isChecked == false {
-								Text(task.title)
+								HStack {
+									Image(systemName: Constants.circle)
+										.onTapGesture {
+											task.isChecked = true
+											self.saveContext()
+										}
+									NavigationLink(task.title) {
+										TaskEditView(task: task)
+									}
+								}
 							}
 						}
 						.onDelete { index in
 							self.deleteItem(at: index)
 						}
 					}
-					Section("completed ") {
+					Section(Constants.sectionComplitedName) {
 						ForEach(tasks) { task in
 							if task.isChecked == true {
-								Text(task.title)
-									.foregroundColor(.gray)
+								HStack {
+									Image(systemName: Constants.circleFill)
+										.onTapGesture {
+											task.isChecked = false
+											self.saveContext()
+										}
+									NavigationLink(task.title) {
+										TaskEditView(task: task)
+									}
+								}
 							}
 						}
 						.onDelete { index in
@@ -55,11 +79,20 @@ struct ToDoListMainScreen: View {
 					}
 				}
 			}
+			
 		}
 	}
 }
 
 extension ToDoListMainScreen {
+	func saveContext() {
+		do {
+			try managedObjectContext.save()
+		} catch {
+			print(String(error.localizedDescription))
+		}
+	}
+	
 	func deleteItem(at offsets: IndexSet) {
 		for index in offsets {
 			let task = tasks[index]
