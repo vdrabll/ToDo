@@ -9,6 +9,11 @@ import SwiftUI
 import CoreData
 
 struct TaskEditView: View {
+	
+	private enum Constants {
+		static let buttonTitle = "     Save           "
+		static let title = "Task"
+	}
 	@Environment(\.managedObjectContext) var managedObjectContext
 	@Environment (\.presentationMode) var presentationMode: Binding<PresentationMode>
 	
@@ -25,7 +30,7 @@ struct TaskEditView: View {
 	}
 	var body: some View {
 		VStack(alignment: .center) {
-			Text("Task")
+			Text(Constants.title)
 				.font(.system(size: 40))
 				.bold()
 			Spacer(minLength: 90)
@@ -40,24 +45,26 @@ struct TaskEditView: View {
 			Spacer(minLength: 150)
 			
 			
-			Button("Save") {
-					if passedTask == nil {
-						passedTask = ToDoTask(context: managedObjectContext)
-					}
+			Button(Constants.buttonTitle) {
+				if passedTask == nil {
+					passedTask = ToDoTask(context: managedObjectContext)
+				}
 				passedTask?.title = title
 				passedTask?.id = UUID()
 				passedTask?.isChecked = false
 				save(context: managedObjectContext)
 				presentationMode.wrappedValue.dismiss()
 			}
-			.frame(width: 200.0, height: 50.0)
+			.fontWeight(.medium)
+			.tint(.black)
 	
 		}
-		.padding(13.0)
+		.padding(25.0)
 		.font(.system(size: 40))
 			.buttonStyle(.borderedProminent)
 			.controlSize(.large)
-			.accentColor(/*@START_MENU_TOKEN@*/.gray/*@END_MENU_TOKEN@*/)
+			.background(/*@START_MENU_TOKEN@*//*@PLACEHOLDER=View@*/Color("textfield.background")/*@END_MENU_TOKEN@*/)
+			
 	}
 		
 	
@@ -75,5 +82,6 @@ struct TaskEditView_Previews: PreviewProvider {
 	static var previews: some View {
 		TaskEditView(task: nil)
 			.padding()
+			.background(/*@START_MENU_TOKEN@*//*@PLACEHOLDER=View@*/Color("textfield.background")/*@END_MENU_TOKEN@*/)
 	}
 }

@@ -17,8 +17,7 @@ struct ToDoListMainScreen: View {
 		static let circleFill = "checkmark.circle.fill"
 	}
 	
-	@Environment(\.managedObjectContext) var managedObjectContext
-	
+	@Environment(\.managedObjectContext) var managedObjectContext	
 	@FetchRequest(
 		sortDescriptors: [NSSortDescriptor(keyPath: \ToDoTask.title, ascending: true)],
 		animation: .default)
