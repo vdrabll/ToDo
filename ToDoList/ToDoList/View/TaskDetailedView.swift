@@ -11,7 +11,7 @@ import CoreData
 struct TaskEditView: View {
 	
 	private enum Constants {
-		static let buttonTitle = "     Save           "
+		static let buttonTitle = "Save"
 		static let title = "Task"
 	}
 	@Environment(\.managedObjectContext) var managedObjectContext

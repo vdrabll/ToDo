@@ -17,7 +17,7 @@ struct ToDoListMainScreen: View {
 		static let circleFill = "checkmark.circle.fill"
 	}
 	
-	@Environment(\.managedObjectContext) var managedObjectContext	
+	@Environment(\.managedObjectContext) var managedObjectContext
 	@FetchRequest(
 		sortDescriptors: [NSSortDescriptor(keyPath: \ToDoTask.title, ascending: true)],
 		animation: .default)
@@ -32,7 +32,7 @@ struct ToDoListMainScreen: View {
 						Text(Date(), style: .date)
 							.font(.title)
 						Text(" \( tasks.filter({$0.isChecked != false}).count) completed, \(tasks.filter({$0.isChecked == false}).count) incompleted")
-							.font(.subheadline) }
+						.font(.subheadline) }
 					.frame(alignment: .bottom)
 					NavigationLink(Constants.add) {
 						TaskEditView(task: nil)
