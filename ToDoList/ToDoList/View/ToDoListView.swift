@@ -43,7 +43,7 @@ struct ToDoListView: View {
 						
 						Text(String(format: Constants.subheadline,
 									(tasks.filter({$0.isChecked != false})).count,
-									(tasks.filter({$0.isChecked != false})).count))
+									(tasks.filter({$0.isChecked == false})).count))
 						.font(.subheadline)
 						.frame(maxWidth: .infinity, alignment: .leading )
 						.padding(EdgeInsets(top: 0,
