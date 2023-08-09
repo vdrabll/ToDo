@@ -21,14 +21,13 @@ struct PersistenceController {
 			task.title = "task true - \(item)"
 			task.id = UUID()
 			task.isChecked = true
+			
+			let task2 = ToDoTask(context: viewContext)
+			task2.title = "task false - \(item)"
+			task2.id = UUID()
+			task2.isChecked = false
 		}
 		
-		for item in 0..<5 {
-			let task = ToDoTask(context: viewContext)
-			task.title = "task false - \(item)"
-			task.id = UUID()
-			task.isChecked = false
-		}
 		do {
 			try viewContext.save()
 		} catch {
@@ -36,14 +35,6 @@ struct PersistenceController {
 		}
 		return controller
 	}()
-	
-	func addDefoutlTasks() {
-		let task = ToDoTask(context: container.viewContext)
-		task.isChecked = true
-		task.title = "im coredata checked task"
-		task.id = UUID()
-		PersistenceController.shared.save()
-	}
 	
 	init(inMemory: Bool = false) {
 		container = NSPersistentContainer(name: "ToDoListModel")
@@ -56,19 +47,6 @@ struct PersistenceController {
 			if let error = error {
 				print(String(describing: storeDescription))
 				print(String(describing: error))
-			}
-		}
-	}
-	
-	func save() {
-		let context = container.viewContext
-
-		if context.hasChanges {
-			do {
-				try context.save()
-			} catch {
-				context.rollback()
-				print(String(describing: error.localizedDescription))
 			}
 		}
 	}

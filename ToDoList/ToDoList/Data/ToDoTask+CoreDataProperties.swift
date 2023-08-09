@@ -20,12 +20,12 @@ extension ToDoTask {
         return NSFetchRequest<ToDoTask>(entityName: "ToDoTask")
     }
 
-    @NSManaged public var id: UUID
+    @NSManaged public var id: UUID? 
     @NSManaged public var isChecked: Bool
     @NSManaged public var title: String
 
 }
 
-extension ToDoTask : Identifiable {
+extension ToDoTask: Identifiable {
 
 }

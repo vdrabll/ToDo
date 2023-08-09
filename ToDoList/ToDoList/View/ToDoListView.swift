@@ -8,13 +8,14 @@
 import SwiftUI
 import CoreData
 
-struct ToDoListMainScreen: View {
+struct ToDoListView: View {
 	private enum Constants {
-		static let sectionNotComplitedName = "not completed"
-		static let sectionComplitedName = "completed"
+		static let sectionNotCompletedName = "not completed"
+		static let sectionCompletedName = "completed"
 		static let add = "+"
 		static let circle = "circle"
 		static let circleFill = "checkmark.circle.fill"
+		static let subheadline = " %i completed, %i incompleted"
 	}
 	
 	@Environment(\.managedObjectContext) var managedObjectContext
@@ -26,20 +27,43 @@ struct ToDoListMainScreen: View {
 	
 	var body: some View {
 		NavigationStack {
-			VStack(alignment: .leading) {
-				HStack(spacing: 140) {
-					VStack {
+			VStack() {
+				HStack() {
+					VStack() {
 						Text(Date(), style: .date)
-							.font(.title)
-						Text(" \( tasks.filter({$0.isChecked != false}).count) completed, \(tasks.filter({$0.isChecked == false}).count) incompleted")
-						.font(.subheadline) }
-					.frame(alignment: .bottom)
+							.font(
+								Font.custom("Inter", size: 32)
+									.weight(.bold)
+							)
+							.frame(maxWidth: .infinity, alignment: .leading )
+							.padding(EdgeInsets(top: 0,
+												leading: 20,
+												bottom: 0,
+												trailing: 0))
+						
+						Text(String(format: Constants.subheadline,
+									(tasks.filter({$0.isChecked != false})).count,
+									(tasks.filter({$0.isChecked != false})).count))
+						.font(.subheadline)
+						.frame(maxWidth: .infinity, alignment: .leading )
+						.padding(EdgeInsets(top: 0,
+											leading: 20,
+											bottom: 0,
+											trailing: 0))
+					
+					 }
+					
 					NavigationLink(Constants.add) {
 						TaskEditView(task: nil)
 					}
+					.padding(EdgeInsets(top: 0,
+										leading: 0,
+										bottom: 0,
+										trailing: 40))
 				}
+				
 				List {
-					Section(Constants.sectionNotComplitedName) {
+					Section(Constants.sectionNotCompletedName) {
 						ForEach(tasks) { task in
 							if task.isChecked == false {
 								HStack {
@@ -55,10 +79,10 @@ struct ToDoListMainScreen: View {
 							}
 						}
 						.onDelete { index in
-							self.deleteItem(at: index)
+							self.deleteTodo(index)
 						}
 					}
-					Section(Constants.sectionComplitedName) {
+					Section(Constants.sectionCompletedName) {
 						ForEach(tasks) { task in
 							if task.isChecked == true {
 								HStack {
@@ -74,17 +98,16 @@ struct ToDoListMainScreen: View {
 							}
 						}
 						.onDelete { index in
-							self.deleteItem(at: index)
+							self.deleteTodo(index)
 						}
 					}
 				}
 			}
-			
 		}
 	}
 }
 
-extension ToDoListMainScreen {
+extension ToDoListView {
 	func saveContext() {
 		do {
 			try managedObjectContext.save()
@@ -93,21 +116,21 @@ extension ToDoListMainScreen {
 		}
 	}
 	
-	func deleteItem(at offsets: IndexSet) {
-		for index in offsets {
-			let task = tasks[index]
-			managedObjectContext.delete(task)
-			do {
-				try managedObjectContext.save()
-			} catch {
-				print(String(error.localizedDescription))
-			}
+	private func deleteTodo(_ index: IndexSet) { withAnimation {
+		let todo: ToDoTask? = index.map {
+			tasks [$0]
+		}.first
+		if (todo != nil) {
+			managedObjectContext.delete(todo!)
+			saveContext()
 		}
+	 }
+  }
+}
+
+struct ToDoListView_Previews: PreviewProvider {
+	static var previews: some View {
+		ToDoListView().environment(\.managedObjectContext, PersistenceController.preview.container.viewContext)
 	}
 }
 
-struct ContentView_Previews: PreviewProvider {
-	static var previews: some View {
-		ToDoListMainScreen().environment(\.managedObjectContext, PersistenceController.preview.container.viewContext)
-	}
-}
